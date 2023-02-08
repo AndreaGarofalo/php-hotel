@@ -41,6 +41,7 @@
     ];
 
     $checked = false;
+    $rating = $_GET['rating'] ?? null;
 
     if(isset($_GET['parking'])) {
         $checked = 'checked';
@@ -54,6 +55,15 @@
         $hotels = $filtered_hotels;
     }
 
+    if($rating) {
+        $filtered_hotels = [];
+
+        foreach($hotels as $hotel) {
+            if($hotel['vote'] >= $rating) $filtered_hotels[] = $hotel;
+        }
+
+        $hotels = $filtered_hotels;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -83,13 +93,17 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                value=""
                 id="parking"
                 name="parking"
+                <?php $checked ?>
               />
               <label class="form-check-label" for="parking">
                 Mostra solo hotel con parcheggio
               </label>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" step="1" value="<?= $rating ?>">
             </div>
             <button class="btn btn-small btn-primary">Filtra</button>
           </div>
